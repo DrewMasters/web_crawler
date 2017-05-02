@@ -70,7 +70,7 @@ def thread_url():
 
 	while not visit_links.empty():
 		if state == 1:
-			T1.insert('insert',"")
+			T1.delete(1.0,"end")
 			url_visit(visit_links.get())
 		elif state == 2:
 			print_visited()
