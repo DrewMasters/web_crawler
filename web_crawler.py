@@ -12,18 +12,20 @@ visit_links.put(url)
 def url_visit(url):
 	#get domain name of url
 	domain = re.search('.+://[\w\.]*',url).group(0)
+
+	print url
 	
 	#open url
-	handle = urllib.urlopen(url)
-
+	try: handle = urllib.urlopen(url)
+	except:
+		return
 	html = handle.read()
 	
 	links = re.findall('"((http|ftp)s?://.*?)"', html)
-	print links[1][0]
 	for t in links:
 		turl = t[0]
 		if domain != re.search('.+://[\w\.]*',turl).group(0):
-			print turl
+			visit_links.put(turl)
 
 while not visit_links.empty():
 	url_visit(visit_links.get())
