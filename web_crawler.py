@@ -1,19 +1,16 @@
 import urllib
 import re
 import HTMLParser
-import Tkinter as tk
+try:
+    #python2
+    import Tkinter as tk
+except:
+    #python3
+    import tkinter as tk
 import ScrolledText as tkst
 import Queue
 import operator
 import threading
-
-#visit_links = Queue.Queue()
-#visited = {}
-#state = 0
-#top = tk.Tk()
-#url = "https://docs.python.org/2/library/re.html"
-#url = "http://google.com"
-#visit_links.put(url)
 
 def url_visit(url):
 	#get domain name of url
@@ -38,7 +35,8 @@ def url_visit(url):
 				visited[turl]=1
 				visit_links.put(turl)
 				count +=1
-	print("Found " + str(count) + " remote URLs on " + str(url))
+        s = "Found " + str(count) + " remote URLs on " + str(url) + "\n"
+        T1.insert('insert',s)
 
 def print_visited():
 	sorted_visited = sorted(visited.items(),key=operator.itemgetter(1),reverse=True)
@@ -63,6 +61,7 @@ def process():
 		state =1
 	elif state == 3:
 		state = 1
+                T1.delete(1.0,"end")
 		
 def thread_url():
 	global state
@@ -70,9 +69,9 @@ def thread_url():
 
 	while not visit_links.empty():
 		if state == 1:
-			T1.delete(1.0,"end")
 			url_visit(visit_links.get())
 		elif state == 2:
+			T1.delete(1.0,"end")
 			print_visited()
 			state =3
 	
@@ -80,7 +79,6 @@ visit_links = Queue.Queue()
 visited = {}
 state = 0
 top = tk.Tk()
-#visit_links.put(url)
 B1 = tk.Button(top, text="start/pause/resume",command=process)
 E1 = tk.Entry(top,bd=5)
 T1 = tkst.ScrolledText(top)
